@@ -53,6 +53,11 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    status: {
+      type: String,
+      enum: ["completed", "cancelled", "pending"],
+      default: "pending",
+    },
     // createdAt: {
     //   type: Date,
     //   default: Date.now(),
