@@ -51,7 +51,12 @@ const userSchema = new mongoose.Schema(
     },
     isDeleted: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    status: {
+      type: String,
+      enum: ["completed", "cancelled", "pending"],
+      default: "pending",
     },
     // createdAt: {
     //   type: Date,

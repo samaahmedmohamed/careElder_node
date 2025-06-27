@@ -2,7 +2,7 @@ const validator = require("validator");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema(
+const providerSchema = new mongoose.Schema(
   {
     //mm
     firstName: {
@@ -50,10 +50,13 @@ const userSchema = new mongoose.Schema(
       enum: ["provider"],
       default: "provider",
     },
-    jobDescription: {
+    jobTitle: {
       type: String,
       enum: ["Home Nursing", "Care Assistant", "Physiotherapy"],
       defualt: "Care Assistant",
+    },
+    jobDescription: {
+      type: String,
     },
     cvImage: {
       type: String,
@@ -69,7 +72,19 @@ const userSchema = new mongoose.Schema(
     },
     isDeleted: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    experience: {
+      type: [String],
+    },
+    education: {
+      type: [String],
+    },
+    languages: {
+      type: [String],
+    },
+    skills: {
+      type: [String],
     },
     // createdAt: {
     //   type: Date,
@@ -82,7 +97,7 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-userSchema
+providerSchema
   .virtual("confirmPassword")
   .set(function (value) {
     this._confirmPassword = value;
@@ -91,7 +106,7 @@ userSchema
     return this._confirmPassword;
   });
 
-userSchema.pre("save", async function (next) {
+providerSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     if (this._confirmPassword !== this.password) {
       return next(new Error("passwords donot match"));
@@ -101,6 +116,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const providerModel = mongoose.model("providers", userSchema);
+const providerModel = mongoose.model("providers", providerSchema);
 
 module.exports = providerModel;
