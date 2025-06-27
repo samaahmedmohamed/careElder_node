@@ -1,9 +1,20 @@
-// const
-
 const userModel = require("../Model/userModel");
 const catchAsync = require("../utilities/catchAsync");
 
 const createUser = catchAsync(async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    // role,
+    country,
+    phone,
+    gender,
+    profileImage,
+  } = req.body;
+
   const newUser = await userModel.create({
     firstName,
     lastName,
@@ -15,6 +26,7 @@ const createUser = catchAsync(async (req, res) => {
     phone,
     gender,
     profileImage,
+    status: "pending",
   });
 
   res.status(200).json({
@@ -43,11 +55,11 @@ const getAllUser = catchAsync(async (req, res) => {
 });
 
 const getUser = catchAsync(async (req, res) => {
-  const user = await userModel.findById(req.param.id);
+  const user = await userModel.findById(req.params.id);
   if (!user) {
     res.status(404).json({
       status: "failed",
-      message: "No user Exists with that id",
+      message: "User not found",
     });
   }
   res.status(200).json({
@@ -57,10 +69,17 @@ const getUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const updated = await userModel.findByIdAndUpdate(req.param.id, req.body, {
+  const updated = await userModel.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
+
+  if (!updated) {
+    return res.status(404).json({
+      status: "fail",
+      message: "User not found",
+    });
+  }
 
   res.status(200).json({
     status: "success",
