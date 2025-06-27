@@ -67,4 +67,11 @@ const serviceSchema = new mongoose.Schema({
     ],
     required: true,
   },
+  provider: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "providers",
+    required: true
+  }
 });
+const serviceModel=mongoose.model("services", serviceSchema)
+module.exports=serviceModel;
